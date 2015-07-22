@@ -1,0 +1,10 @@
+---
+- name : Provision server for recipedb
+  hosts: all
+  sudo: true
+  tasks:
+    - apt: update_cache=yes
+    - apt: name={{ item }} state=latest 
+      with_items:
+       - mongodb-server
+       - python-flask
