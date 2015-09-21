@@ -1,0 +1,26 @@
+---
+- name : Provision server for recipedb
+  hosts: all
+  sudo: true
+  tasks:
+    # This is for fedora 22 or newer
+    - name: Install Yum Utilities
+      sudo: true
+      shell: dnf install yum-utils -y
+      args:
+        creates: /usr/bin/repomanage
+
+    - dnf: name={{ item }} state=latest 
+      with_items:
+       - mongodb-server
+       - python-pip
+       - python-pymongo
+       - gcc 
+       - python-devel
+    - pip: name={{ item }} state=latest
+      with_items:
+       - pymongo
+       - flask
+       - flask-restful
+       - Flask-PyMongo
+    - service: name=mongod state=running enabled=true
